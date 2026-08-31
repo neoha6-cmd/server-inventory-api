@@ -4,7 +4,7 @@ server= {
 
  1: {"id":3, "name": "web-01", "ip": "192.168.1.1", "env":"prod"},
 
- 2: {"id":2, "name": "web-2", "ip": "192.168.1.2", "env":"test"}
+ 2: {"id":2, "name": "web-2", "p": "192.168.1.2", "env":"test"}
 
 }
 class NewServer(BaseModel):
