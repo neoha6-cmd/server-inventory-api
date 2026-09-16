@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: flake8 .
+
+      - name: Run tests
+        run: pytest -q --junitxml=report.xml
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-py${{ matrix.python-version }}
+          path: report.xml
+
+  smoke:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Start app in background
+        env:
+          APP_VERSION: ci-${{ github.run_number }}
+        run: |
+          nohup python app.py > app.log 2>&1 &
+          sleep 5
+
+      - name: Check /healthz
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/healthz)
+          echo "status=$status"
+          if [ "$status" -ne 200 ]; then
+            cat app.log
+            exit 1
+          fi
+
+      - name: Check /readyz
+        run: curl -s http://127.0.0.1:5000/readyz | grep '"servers_loaded":9'
+
+      - name: Check /version
+        run: curl -s http://127.0.0.1:5000/version | grep "ci-${{ github.run_number }}"
