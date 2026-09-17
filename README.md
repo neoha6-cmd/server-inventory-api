@@ -1,6 +1,6 @@
-![CI](https://github.com/duce/server-inventory-api/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/neoha6-cmd/server-inventory-api/actions/workflows/ci.yml/badge.svg)
 
-](https://github.com/duce/server-inventory-api/actions/workflows/ci.yml)
+](https://github.com/neoha6-cmd/server-inventory-api/actions/workflows/ci.yml)
 
 # server-inventory-api
 
