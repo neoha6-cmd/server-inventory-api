@@ -72,7 +72,7 @@ def test_find_server_hit_and_miss():
 
 def test_summarize_counts():
     result = summarize(SAMPLE)
-    assert result["total"] == 4
+    assert result["total"] == 999
     assert result["by_env"]["prod"] == 2
     assert result["by_status"]["online"] == 2
     assert result["total_cpu_cores"] == 30
