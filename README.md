@@ -1,3 +1,8 @@
+[
+
+![CI](https://github.com/duce/server-inventory-api/actions/workflows/ci.yml/badge.svg)
+
+](https://github.com/USERNAME/REPO/actions/workflows/ci.yml)
 # server-inventory-api
 
 <!-- Homework task 8: put your workflow status badge on the line below -->
@@ -61,3 +66,4 @@ pytest.ini                tells pytest where to find the code
 
 Create `.github/workflows/ci.yml` so GitHub runs the tests on every push.
 Full instructions are in the homework PDF.
+# test PR
